@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apostatis</title>
+    <link rel="icon" type="image/png" href="./Static/favicon_io (3)/android-chrome-192x192.png">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- The font font-family yellow tail which is accessed using css: font-family: 'Yellowtail', cursive; -->
+    
+    <script type="text/javascript" src="./jquery-min.js"></script>
+
+    <style type="text/css">
+    
+        body
+        {
+            padding: 0;
+            margin: 0;
+            font-family: 'Noto Sans', sans-serif;
+        }
+
+        #header
+        {
+            width: 100%;
+            background-color: #d6d6d6;
+            padding: 10px;
+            height: 2rem;
+        }
+
+        #logo
+        {
+            float: left;
+            padding: 1px 5px;
+            font-family: 'Yellowtail', cursive;
+            font-size: 160%;
+
+        }
+
+        #buttonContainer
+        {
+            
+            width: 239px;
+            margin: 0 auto;
+            
+           
+        }
+
+        .toggleButton
+        {
+            float: left;
+            padding: 7px;
+            border: 1px solid rgb(175, 175, 175, 0.5);
+            border-right: none; 
+            
+            /* removes the right boder  */
+
+            font-size: 90%;
+            color: rgb(99, 99, 99);
+           
+            box-shadow: 3px 3px 8px 0 rgba(31, 38, 135, 0.24);
+            /*Give shadow to the elements with this class*/
+            backdrop-filter: blur( 7.5px );
+            -webkit-backdrop-filter: blur( 7.5px );
+
+            /* border: 1px solid rgba( 255, 255, 255, 0.18 ); */
+
+
+        }
+
+        #html
+        {
+            border-top-left-radius: 4px; 
+            /* will give seperate border styling to the radius  */
+            border-bottom-left-radius: 4px;
+            
+        }
+
+        #output
+        {
+            border-right: 1px solid rgb(175, 175, 175);
+            border-top-right-radius: 4px; 
+            /* will give seperate border styling to the radius  */
+            border-bottom-right-radius: 4px;
+        }
+
+        .active
+        {
+            background-color: #daeaff;
+        }
+
+        .highlightedButton
+        {
+            background-color: rgb(204, 204, 204) ;
+        }
+
+        .TArea
+        {
+            resize: none; 
+            /* Prevents the text area from being resized */
+            border-width: 2px;
+            border-color: rgb(161, 161, 161);
+            border-top: none;
+            font-size: 110%;
+            background-color: rgb(252, 252, 252);
+            
+            
+        }
+        .Panel
+        {
+            border-left: none;
+            float: left;
+            
+            
+        }
+        .hidden
+        {
+            display: none;
+        }
+        
+
+    
+    </style>
+
+
+</head>
+<body>
+    <!-- -------------------------------------------header starts-----------------------------------------------------  -->
+    <div id="header">
+
+        <div id="logo">
+            Apostatis
+        </div>
+        <div id="buttonContainer"> 
+            <!-- this contains the toggle buttons in the header  -->
+            <div class="toggleButton active" id="html">HTML</div>
+            <div class="toggleButton" id="css"> CSS</div>
+            <div class="toggleButton" id="javascript"> Javascript</div>
+            <div class="toggleButton active" id="output">Output</div>
+        </div>
+      
+
+    </div>
+
+    <!---------------------------------- header is over now ---------------------------------------->
+
+    <!-- -------------------------------------------html content starts-----------------------------------------------------  -->
+
+    <div id="bodyContainer">
+        <textarea  id="htmlPanel" class="Panel TArea"> <p>Hello</p></textarea>
+        <textarea  id="cssPanel" class="Panel TArea hidden"> p { color : green; } ;</textarea>
+        <textarea  id="javascriptPanel" class="Panel TArea hidden"> alert("Welcome to The Apostatis!")</textarea>
+
+
+        <iframe frameborder="0" id="outputPanel" class="Panel"></iframe>
+    </div>
+
+
+
+
+
+    <!-- -------------------The Script----------------------------- -->
+
+    <script type="text/javascript">
+
+        function updateOutput() {
+                
+                $("#outputPanel").contents().find("html").html("<html><head><style type='text/css'>" + $("#cssPanel").val() + "</style></head><body>" + $("#htmlPanel").val());
+
+                
+                document.getElementById("outputPanel").contentWindow.eval($("#javascriptPanel").val());
+                //Returns output on outputPanel through eval of JS.
+                
+                
+                
+            };
+
+        $(".toggleButton").hover( 
+            //when the toggleButton class element is hovered on, below functions will be executed
+            function()
+            {
+                $(this).addClass("highlightedButton"); 
+                //will add the highlightedClass when mouse hovers on it. 
+            },
+            function() 
+            {
+                $(this).removeClass("highlightedButton"); 
+                //will remove the highlightedclass, reverting back to original colour when mouse moves away.
+            }
+        );
+        $(".toggleButton").click(  //when the toggleButton class element is clicked, below function will be executed.
+            function()
+            {
+                $(this).toggleClass("active"); 
+                //toggles the active class to add it, or remove it whenever clicked on.
+
+                $(this).removeClass("highlightedButton"); 
+                //this removes the highlight colour of grey on clicking right away so 
+                // the colour of the button is visible even on hover to show if it was clicked or not.
+
+                var panelId= $(this).attr("id")+ "Panel";
+                $("#"+ panelId).toggleClass("hidden");
+                //variable panelId, gets the id of the button clicked and adds panel to it, then the panelId is placed on toggle class of hidden
+
+                var noOfActivePanel= 4- $('.hidden').length;
+                $(".Panel").width(($(window).width()/noOfActivePanel)-6.15); 
+                //This helps in deciding the width of every section.
+            }
+        );
+
+
+        $(".Panel").height($(window).height()- $("#header").height()- 26); 
+        //Gives height value to Panel class, by removing height of header and 26px from window height
+
+        $(".Panel").width(($(window).width()/2)-6);
+        ////Gives width value to Panel class, by dividing the window's width by 2, then removing 6 px
+
+        updateOutput();
+        // enables the iframe to scan htmlPanel for html based code and then show it's value on iframe
+
+      
+
+        $(".TArea").on('change keyup paste', function(){
+            updateOutput(); //Calls the function udpadeOutput.
+            
+        });
+
+
+    </script>
+</body>
+</html>
